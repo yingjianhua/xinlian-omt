@@ -2,8 +2,6 @@ package com.irille.omt.entity.sys;
 
 import java.util.stream.Stream;
 
-import com.irille.omt.entity.auth.Role.T;
-
 import irille.core.sys.Sys;
 import irille.pub.bean.BeanInt;
 import irille.pub.tb.Fld;

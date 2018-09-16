@@ -2,8 +2,6 @@ package com.irille.omt.entity.sys;
 
 import java.util.stream.Stream;
 
-import com.irille.omt.entity.auth.Role.T;
-
 import irille.core.sys.Sys;
 import irille.pub.bean.BeanInt;
 import irille.pub.tb.Fld;
@@ -18,18 +16,18 @@ public class Access extends BeanInt<Access> {
 
 	public enum T implements IEnumFld {// @formatter:off
 		PKEY(TbBase.crtIntPkey()),
-		NAME(Sys.T.STR__100, "name"),
-		MODULE(Sys.T.STR__100, "module"),
-		CONTROLLER(Sys.T.STR__100, "controller"),
-		ACTION(Sys.T.STR__500, "action"),
-		METHOD(Sys.T.STR__100, "method"),
+		ACTION(Sys.T.STR__100, "action"),//请求的名字如:sys_access_init
+		MODULE(Sys.T.STR__100, "模块"),//模块的平台显示名称如:系统模块
+		CONTROLLER(Sys.T.STR__100, "控制器"),//控制器的平台显示名称如:菜单管理
+		METHOD(Sys.T.STR__100, "方法"),//方法的平台显示名称如:查询
+		DESCRIPTION(Sys.T.TEXT__500_NULL, "描述"),
 		SORT(Sys.T.SORT__INT, "sort"),
 		// >>>以下是自动产生的源代码行--内嵌字段定义--请保留此行用于识别>>>
 		// <<<以上是自动产生的源代码行--内嵌字段定义--请保留此行用于识别<<<
 		;
 		// >>>以下是自动产生的源代码行--自动建立的索引定义--请保留此行用于识别>>>
 		// <<<以上是自动产生的源代码行--自动建立的索引定义--请保留此行用于识别<<<
-		public static final Index IDX_MODULE_CONTROLLER_METHOD = TB.addIndex("module_controller_method", true, MODULE, CONTROLLER, METHOD);
+		public static final Index IDX_ACTION = TB.addIndex("action", true, ACTION);
 		private Fld<?> _fld;
 
 		private T(Class<?> clazz, String name, boolean... isnull) {
@@ -74,31 +72,31 @@ public class Access extends BeanInt<Access> {
 	// >>>以下是自动产生的源代码行--源代码--请保留此行用于识别>>>
   //实例变量定义-----------------------------------------
   private Integer _pkey;	// 编号  INT
-  private String _name;	// name  STR(100)
-  private String _module;	// module  STR(100)
-  private String _controller;	// controller  STR(100)
-  private String _action;	// action  STR(500)
-  private String _method;	// method  STR(100)
+  private String _action;	// action  STR(100)
+  private String _module;	// 模块  STR(100)
+  private String _controller;	// 控制器  STR(100)
+  private String _method;	// 方法  STR(100)
+  private String _description;	// 描述  TEXT(200)<null>
   private Integer _sort;	// sort  INT
 
 	@Override
   public Access init(){
 		super.init();
-    _name=null;	// name  STR(100)
-    _module=null;	// module  STR(100)
-    _controller=null;	// controller  STR(100)
-    _action=null;	// action  STR(500)
-    _method=null;	// method  STR(100)
+    _action=null;	// action  STR(100)
+    _module=null;	// 模块  STR(100)
+    _controller=null;	// 控制器  STR(100)
+    _method=null;	// 方法  STR(100)
+    _description=null;	// 描述  TEXT(200)
     _sort=0;	// sort  INT
     return this;
   }
 
   //方法----------------------------------------------
-  public static Access loadUniqueModule_controller_method(boolean lockFlag,String module,String controller,String method) {
-    return (Access)loadUnique(T.IDX_MODULE_CONTROLLER_METHOD,lockFlag,module,controller,method);
+  public static Access loadUniqueAction(boolean lockFlag,String action) {
+    return (Access)loadUnique(T.IDX_ACTION,lockFlag,action);
   }
-  public static Access chkUniqueModule_controller_method(boolean lockFlag,String module,String controller,String method) {
-    return (Access)chkUnique(T.IDX_MODULE_CONTROLLER_METHOD,lockFlag,module,controller,method);
+  public static Access chkUniqueAction(boolean lockFlag,String action) {
+    return (Access)chkUnique(T.IDX_ACTION,lockFlag,action);
   }
   public Integer getPkey(){
     return _pkey;
@@ -106,11 +104,11 @@ public class Access extends BeanInt<Access> {
   public void setPkey(Integer pkey){
     _pkey=pkey;
   }
-  public String getName(){
-    return _name;
+  public String getAction(){
+    return _action;
   }
-  public void setName(String name){
-    _name=name;
+  public void setAction(String action){
+    _action=action;
   }
   public String getModule(){
     return _module;
@@ -124,17 +122,17 @@ public class Access extends BeanInt<Access> {
   public void setController(String controller){
     _controller=controller;
   }
-  public String getAction(){
-    return _action;
-  }
-  public void setAction(String action){
-    _action=action;
-  }
   public String getMethod(){
     return _method;
   }
   public void setMethod(String method){
     _method=method;
+  }
+  public String getDescription(){
+    return _description;
+  }
+  public void setDescription(String description){
+    _description=description;
   }
   public Integer getSort(){
     return _sort;

@@ -3,13 +3,15 @@ package com.irille.omt.pub.annotation;
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.log4j.Logger;
+
+import com.irille.omt.config.Order;
 import com.irille.omt.pub.util.file.Consumer;
 import com.irille.omt.pub.util.file.Finder;
 
@@ -17,6 +19,7 @@ import irille.pub.bean.BeanBase;
 import irille.pub.bean.BeanMain;
 
 public class Scanner {
+	private static final Logger log = Logger.getLogger(Scanner.class);
 	private static Map<Class<?>, List<Class<?>>> TYPE_ANNOTATION_MAPS = new HashMap<>();
 	
 	public static void find() {
@@ -44,7 +47,22 @@ public class Scanner {
 	}
 	
 	public static <T extends Annotation> List<Method> findMethodByAnnotation(Class<T> annotationClass, Class<?> clazz) {
-		return Stream.of(clazz.getMethods()).filter(method->method.getAnnotation(annotationClass)!=null).collect(Collectors.toList());
+		log.debug("scanning annotation "+annotationClass.getName()+" in "+clazz.getName());
+		return Stream.of(clazz.getMethods())
+				.filter(method->{
+					if(method.getAnnotation(annotationClass)!=null) {
+						log.debug("finded "+method);
+						return true;
+					} else {
+						return false;
+					}
+				})
+				.sorted((m1,m2)->{
+					Order order1 = m1.getAnnotation(Order.class);
+					Order order2 = m2.getAnnotation(Order.class);
+					return Integer.compare(order1==null?Integer.MAX_VALUE:order1.value(), order2==null?Integer.MAX_VALUE:order2.value());
+				})
+				.collect(Collectors.toList());
 	}
 	
 	/**
@@ -71,23 +89,35 @@ public class Scanner {
 		return findClassByAnnotation(annotationClass, null, true);
 	}
 	public static <T extends Annotation> List<Class<?>> findClassByAnnotation(Class<T> annotationClass, String rootPackage, boolean noCache) {
+		log.debug("scanning annotation "+annotationClass.getName()+" in "+rootPackage);
 		if(noCache||TYPE_ANNOTATION_MAPS.containsKey(annotationClass)) {
-			String file = Scanner.class.getResource("/").getFile();
-			String filepath = new File(file).getAbsolutePath()+File.separator+(rootPackage==null?"":rootPackage.replaceAll("\\.", "\\\\"));
+			String classPath = new File(Scanner.class.getResource("/").getFile()).getAbsolutePath();
+			String rootPath = classPath+File.separator+(rootPackage==null?"":rootPackage.replaceAll("\\.", "\\\\"));
 			
 			List<Class<?>> classes = new Finder()
-			.find(filepath, "\\.class$")
+			.find(rootPath, "\\.class$")
 			.stream()
-			.map(fileName->Consumer.toClassName(filepath+File.separator, fileName))
-			.map(t -> {
+			.map(fileName->Consumer.toClassName(classPath+File.separator, fileName))
+			.map(className -> {
 				try {
-					System.out.println(t);
-					return Class.forName(t);
+					return Class.forName(className);
 				} catch (ClassNotFoundException e) {
 					return null;
 				}
 			})
-			.filter(clazz->clazz!=null&&clazz.getAnnotation(annotationClass)!=null)
+			.filter(clazz->{
+				if(clazz!=null&&clazz.getAnnotation(annotationClass)!=null) {
+					log.debug("finded "+clazz.getName());
+					return true;
+				} else {
+					return false;
+				}
+			})
+			.sorted((c1,c2)->{
+				Order order1 = c1.getAnnotation(Order.class);
+				Order order2 = c2.getAnnotation(Order.class);
+				return Integer.compare(order1==null?Integer.MAX_VALUE:order1.value(), order2==null?Integer.MAX_VALUE:order2.value());
+			})
 			.collect(Collectors.toList());
 			TYPE_ANNOTATION_MAPS.put(annotationClass, classes);
 		}

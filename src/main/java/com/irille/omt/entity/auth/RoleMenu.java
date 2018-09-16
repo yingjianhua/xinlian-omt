@@ -2,7 +2,6 @@ package com.irille.omt.entity.auth;
 
 import java.util.stream.Stream;
 
-import com.irille.omt.entity.auth.Role.T;
 import com.irille.omt.entity.sys.Menu;
 
 import irille.pub.bean.BeanInt;

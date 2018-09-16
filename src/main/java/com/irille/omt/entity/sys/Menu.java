@@ -2,14 +2,13 @@ package com.irille.omt.entity.sys;
 
 import java.util.stream.Stream;
 
-import com.irille.omt.entity.auth.Role.T;
-
 import irille.core.sys.Sys;
 import irille.core.sys.Sys.OYn;
 import irille.pub.bean.BeanInt;
 import irille.pub.tb.Fld;
 import irille.pub.tb.IEnumFld;
 import irille.pub.tb.Tb;
+import irille.pub.tb.Tb.Index;
 import irille.pub.tb.TbBase;
 
 public class Menu extends BeanInt<Menu> {
@@ -18,15 +17,17 @@ public class Menu extends BeanInt<Menu> {
 
 	public enum T implements IEnumFld {// @formatter:off
 		PKEY(TbBase.crtIntPkey()),
-		NAME(Sys.T.STR__100, "name"),
-		UP(Menu.fldOutKey("up", "上级菜单")),
-		LEAF(Sys.T.YN, "leaf"),
+		NAME(Sys.T.STR__100, "名称"),//菜单的平台显示名称如:机构信息
+		FULL_NAME(Sys.T.STR__100, "完全限定名"),//菜单的完全限定名如:系统管理_机构信息
+		UP(Menu.fldOutKey("up", "上级菜单").setNull()),
+		LEAF(Sys.T.YN, "leaf"),//是否为叶菜单
 		SORT(Sys.T.SORT__INT, "sort"),
 		// >>>以下是自动产生的源代码行--内嵌字段定义--请保留此行用于识别>>>
 		// <<<以上是自动产生的源代码行--内嵌字段定义--请保留此行用于识别<<<
 		;
 		// >>>以下是自动产生的源代码行--自动建立的索引定义--请保留此行用于识别>>>
 		// <<<以上是自动产生的源代码行--自动建立的索引定义--请保留此行用于识别<<<
+		public static final Index IDX_UP_NAME = TB.addIndex("up_name", true, UP, NAME);
 		private Fld<?> _fld;
 
 		private T(Class<?> clazz, String name, boolean... isnull) {
@@ -71,8 +72,9 @@ public class Menu extends BeanInt<Menu> {
 	// >>>以下是自动产生的源代码行--源代码--请保留此行用于识别>>>
   //实例变量定义-----------------------------------------
   private Integer _pkey;	// 编号  INT
-  private String _name;	// name  STR(100)
-  private Integer _up;	// 上级菜单 <表主键:Menu>  INT
+  private String _name;	// 名称  STR(100)
+  private String _fullName;	// 完全限定名  STR(100)
+  private Integer _up;	// 上级菜单 <表主键:Menu>  INT<null>
   private Byte _leaf;	// leaf <OYn>  BYTE
 	// YES:1,是
 	// NO:0,否
@@ -81,7 +83,8 @@ public class Menu extends BeanInt<Menu> {
 	@Override
   public Menu init(){
 		super.init();
-    _name=null;	// name  STR(100)
+    _name=null;	// 名称  STR(100)
+    _fullName=null;	// 完全限定名  STR(100)
     _up=null;	// 上级菜单 <表主键:Menu>  INT
     _leaf=OYn.DEFAULT.getLine().getKey();	// leaf <OYn>  BYTE
     _sort=0;	// sort  INT
@@ -89,6 +92,12 @@ public class Menu extends BeanInt<Menu> {
   }
 
   //方法----------------------------------------------
+  public static Menu loadUniqueUp_name(boolean lockFlag,Integer up,String name) {
+    return (Menu)loadUnique(T.IDX_UP_NAME,lockFlag,up,name);
+  }
+  public static Menu chkUniqueUp_name(boolean lockFlag,Integer up,String name) {
+    return (Menu)chkUnique(T.IDX_UP_NAME,lockFlag,up,name);
+  }
   public Integer getPkey(){
     return _pkey;
   }
@@ -100,6 +109,12 @@ public class Menu extends BeanInt<Menu> {
   }
   public void setName(String name){
     _name=name;
+  }
+  public String getFullName(){
+    return _fullName;
+  }
+  public void setFullName(String fullName){
+    _fullName=fullName;
   }
   public Integer getUp(){
     return _up;

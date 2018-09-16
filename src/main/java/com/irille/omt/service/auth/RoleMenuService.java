@@ -6,6 +6,10 @@ import com.irille.omt.dao.auth.RoleMenuDao;
 import com.irille.omt.entity.auth.RoleMenu;
 
 public class RoleMenuService {
+	
+	public static void giveAllMenu(Integer role) {
+		
+	}
 
 	public static List<RoleMenu> list() {
 		return RoleMenuDao.list();

@@ -6,12 +6,15 @@ import com.irille.omt.entity.auth.RoleMenu;
 import com.irille.omt.service.auth.RoleMenuService;
 
 import irille.action.BeanAction;
+import irille.pub.svr.Controller;
+import irille.pub.svr.RequestMapping;
 
-public class RoleMenuAction extends BeanAction<RoleMenu, Integer> implements IRoleMenuAction{
+@Controller(module = "角色权限", name = "角色菜单")
+public class RoleMenuAction extends BeanAction<RoleMenu, Integer> {
 
 	private static final long serialVersionUID = 1L;
 
-	@Override
+	@RequestMapping(alias="列表", description="列表角色的所有菜单")
 	public void list() {
 		try {
 			String json = new ObjectMapper().writeValueAsString(RoleMenuService.list());
@@ -25,5 +28,6 @@ public class RoleMenuAction extends BeanAction<RoleMenu, Integer> implements IRo
 		String json = new ObjectMapper().writeValueAsString(RoleMenuService.list());
 		System.out.println(json);
 	}
+
 
 }

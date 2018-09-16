@@ -1,14 +1,13 @@
 package com.irille.omt.dao.auth;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.irille.omt.dao.BaseDao;
+import com.irille.omt.entity.auth.Role;
+import com.irille.omt.entity.auth.Role.T;
 
-public class RoleDao {
+public class RoleDao extends BaseDao {
 
-	public static void main(String[] args) {
-		List<String> list = new ArrayList<>();
-		list.add("name");
-		list.add("sex");
-		
+	public static Role findByName(String name) {
+		return SELECT(Role.class).WHERE(T.NAME, "=?", name).query();
 	}
+	
 }

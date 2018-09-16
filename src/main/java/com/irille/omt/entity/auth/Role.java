@@ -8,6 +8,7 @@ import irille.pub.tb.Fld;
 import irille.pub.tb.IEnumFld;
 import irille.pub.tb.Tb;
 import irille.pub.tb.TbBase;
+import irille.pub.tb.Tb.Index;
 
 public class Role extends BeanInt<Role> {
 	private static final long serialVersionUID = 3685013477292302359L;
@@ -22,6 +23,7 @@ public class Role extends BeanInt<Role> {
 		;
 		// >>>以下是自动产生的源代码行--自动建立的索引定义--请保留此行用于识别>>>
 		// <<<以上是自动产生的源代码行--自动建立的索引定义--请保留此行用于识别<<<
+		public static final Index IDX_NAME = TB.addIndex("name", true, NAME);
 		private Fld<?> _fld;
 
 		private T(Class<?> clazz, String name, boolean... isnull) {
@@ -78,6 +80,12 @@ public class Role extends BeanInt<Role> {
   }
 
   //方法----------------------------------------------
+  public static Role loadUniqueName(boolean lockFlag,String name) {
+    return (Role)loadUnique(T.IDX_NAME,lockFlag,name);
+  }
+  public static Role chkUniqueName(boolean lockFlag,String name) {
+    return (Role)chkUnique(T.IDX_NAME,lockFlag,name);
+  }
   public Integer getPkey(){
     return _pkey;
   }
