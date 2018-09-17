@@ -8,16 +8,45 @@ import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.irille.core.controller.BaseAction;
+import com.irille.omt.dao.auth.RoleOperationDao;
+import com.irille.omt.dao.sys.AccessDao;
+import com.irille.omt.dao.usr.UserDao;
+import com.irille.omt.entity.usr.User;
 import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.ActionProxy;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
-public class ItpCheckPurchaseLogin extends AbstractInterceptor {
+public class ItpUserLogin extends AbstractInterceptor {
 
 	private static final long serialVersionUID = -5308775862619271060L;
 
 	private String autoLogin = "";
 	
 	public String intercept(ActionInvocation actionInvocation) throws Exception {
+		SessionMsg sessionmsg = ItpSessionmsg.getSessionmsg();
+		if(!sessionmsg.haveUser() && !"".equals(autoLogin)) {
+			User user = UserDao.findByUsername(autoLogin);
+			sessionmsg.setCurUser(user);
+		}
+		if(!sessionmsg.haveUser()) {
+			BaseAction.writeTimeout();
+			return null;
+		}
+		
+		ActionProxy proxy = actionInvocation.getProxy();
+		
+		final String actionName = actionInvocation.getProxy().getActionName();
+		if(!AccessDao.listAccess().contains(actionName)) {
+			//非法请求
+			BaseAction.writeErr(0, "非法请求");
+			return null;
+		}
+		if(!RoleOperationDao.listActionByUser(sessionmsg.getCurUser().getPkey()).contains(actionName)) {
+			//没有权限
+			BaseAction.writeErr(0, "没有权限");
+			return null;
+		}
 		return actionInvocation.invoke();
 	}
 	

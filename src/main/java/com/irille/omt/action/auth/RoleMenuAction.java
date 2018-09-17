@@ -2,15 +2,15 @@ package com.irille.omt.action.auth;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.irille.omt.action.OmtAction;
 import com.irille.omt.entity.auth.RoleMenu;
 import com.irille.omt.service.auth.RoleMenuService;
 
-import irille.action.BeanAction;
 import irille.pub.svr.Controller;
 import irille.pub.svr.RequestMapping;
 
 @Controller(module = "角色权限", name = "角色菜单")
-public class RoleMenuAction extends BeanAction<RoleMenu, Integer> {
+public class RoleMenuAction extends OmtAction<RoleMenu, Integer> {
 
 	private static final long serialVersionUID = 1L;
 

@@ -20,7 +20,6 @@ public class ItpSessionmsg extends AbstractInterceptor {
 				sessionmsg = SessionMsg.build();
 				session.put(SessionMsg.session_key, sessionmsg);
 			}
-			SessionMsg.update(sessionmsg, actionInvocation);
 			setSessionmsg(sessionmsg);
 			return actionInvocation.invoke();
 		} catch (Exception e) {

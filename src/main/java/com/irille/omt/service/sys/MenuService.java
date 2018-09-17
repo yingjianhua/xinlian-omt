@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.irille.omt.config.AppConfig;
+import com.irille.core.web.config.AppConfig;
 import com.irille.omt.dao.sys.MenuDao;
 import com.irille.omt.entity.sys.Menu;
 import com.irille.omt.view.sys.MenuView;

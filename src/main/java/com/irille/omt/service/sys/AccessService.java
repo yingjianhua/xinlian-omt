@@ -5,9 +5,9 @@ import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 
+import com.irille.core.commons.annotation.Scanner;
 import com.irille.omt.dao.sys.AccessDao;
 import com.irille.omt.entity.sys.Access;
-import com.irille.omt.pub.annotation.Scanner;
 
 import irille.pub.svr.Controller;
 import irille.pub.svr.RequestMapping;

@@ -2,13 +2,13 @@ package com.irille.omt.entity.auth;
 
 import java.util.stream.Stream;
 
-import com.irille.omt.entity.auth.Role.T;
 import com.irille.omt.entity.sys.Operation;
 
 import irille.pub.bean.BeanInt;
 import irille.pub.tb.Fld;
 import irille.pub.tb.IEnumFld;
 import irille.pub.tb.Tb;
+import irille.pub.tb.Tb.Index;
 import irille.pub.tb.TbBase;
 
 public class RoleOperation extends BeanInt<RoleOperation> {
@@ -24,6 +24,7 @@ public class RoleOperation extends BeanInt<RoleOperation> {
 		;
 		// >>>以下是自动产生的源代码行--自动建立的索引定义--请保留此行用于识别>>>
 		// <<<以上是自动产生的源代码行--自动建立的索引定义--请保留此行用于识别<<<
+		public static final Index IDX_ROLE_OPERATION = TB.addIndex("role_operation", true, ROLE, OPERATION);
 		private Fld<?> _fld;
 
 		private T(Class<?> clazz, String name, boolean... isnull) {
@@ -80,6 +81,12 @@ public class RoleOperation extends BeanInt<RoleOperation> {
   }
 
   //方法----------------------------------------------
+  public static RoleOperation loadUniqueRole_operation(boolean lockFlag,Integer role,Integer operation) {
+    return (RoleOperation)loadUnique(T.IDX_ROLE_OPERATION,lockFlag,role,operation);
+  }
+  public static RoleOperation chkUniqueRole_operation(boolean lockFlag,Integer role,Integer operation) {
+    return (RoleOperation)chkUnique(T.IDX_ROLE_OPERATION,lockFlag,role,operation);
+  }
   public Integer getPkey(){
     return _pkey;
   }

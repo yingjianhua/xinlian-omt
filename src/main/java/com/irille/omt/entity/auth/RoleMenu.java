@@ -9,6 +9,7 @@ import irille.pub.tb.Fld;
 import irille.pub.tb.IEnumFld;
 import irille.pub.tb.Tb;
 import irille.pub.tb.TbBase;
+import irille.pub.tb.Tb.Index;
 
 public class RoleMenu extends BeanInt<RoleMenu> {
 	private static final long serialVersionUID = 3685013477292302359L;
@@ -23,6 +24,7 @@ public class RoleMenu extends BeanInt<RoleMenu> {
 		;
 		// >>>以下是自动产生的源代码行--自动建立的索引定义--请保留此行用于识别>>>
 		// <<<以上是自动产生的源代码行--自动建立的索引定义--请保留此行用于识别<<<
+		public static final Index IDX_ROLE_MENU = TB.addIndex("role_menu", true, ROLE, MENU);
 		private Fld<?> _fld;
 
 		private T(Class<?> clazz, String name, boolean... isnull) {
@@ -79,6 +81,12 @@ public class RoleMenu extends BeanInt<RoleMenu> {
   }
 
   //方法----------------------------------------------
+  public static RoleMenu loadUniqueRole_menu(boolean lockFlag,Integer role,Integer menu) {
+    return (RoleMenu)loadUnique(T.IDX_ROLE_MENU,lockFlag,role,menu);
+  }
+  public static RoleMenu chkUniqueRole_menu(boolean lockFlag,Integer role,Integer menu) {
+    return (RoleMenu)chkUnique(T.IDX_ROLE_MENU,lockFlag,role,menu);
+  }
   public Integer getPkey(){
     return _pkey;
   }
