@@ -1,10 +1,8 @@
 package com.irille.omt.interceptor;
 
+import com.irille.core.repository.db.ConnectionManager;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
-
-import irille.pub.svr.DbPool;
-import irille.pub.svr.Env;
 
 public class ItpDbTransaction extends AbstractInterceptor {
 
@@ -16,19 +14,15 @@ public class ItpDbTransaction extends AbstractInterceptor {
 		String path = actionInvocation.getProxy().getActionName();
 		
 		try {
-			Env.INST.initTran(null, null);
 			rtn = actionInvocation.invoke();
 			String[] ps = path.split("\\_");
 			if (ps[ps.length - 1].equals("list") == false) // 查询不处理事务提交
-				DbPool.getInstance().getConn().commit();
+				ConnectionManager.commitConnection();
 		} catch (Exception e) {
-			DbPool.getInstance().getConn().rollback();
+			ConnectionManager.rollbackConnection();
 			throw e;
 		} finally {
-			Env.INST.removeTran();
-			DbPool.getInstance().getConn().commit(); //提交对日志的更新
-			DbPool.getInstance().removeConn();
-			
+			ConnectionManager.releaseConnection();
 		}
 		return rtn;
 	}

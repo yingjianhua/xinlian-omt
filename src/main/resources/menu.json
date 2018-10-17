@@ -1,48 +1,36 @@
 {
     "menus": [{
         "name": "系统管理",
-        "leaf": false,
+        "route":"product",
+        "component":"Layout",
         "subs": [{
             "name": "机构信息",
-            "leaf": true,
+            "route":"org",
+            "component":"@/views/product/org",
             "ops": [{
                 "name": "新增",
-                "route": "lj",
-                "action": "sys_SysOrg_ins",
-                "sort": 1
+                "action": "sys_SysOrg_ins"
             }, {
                 "name": "修改",
-                "route": "lj",
-                "action": "sys_SysOrg_upd",
-                "sort": 2
+                "action": "sys_SysOrg_upd"
             }, {
                 "name": "删除",
-                "route": "lj",
-                "action": "sys_SysOrg_del",
-                "sort": 3
-            }],
-            "sort": 1
+                "action": "sys_SysOrg_del"
+            }]
         }, {
             "name": "部门信息",
-            "leaf": true,
+            "route":"dep",
+            "component":"@/views/product/dep",
             "ops": [{
                 "name": "新增",
-                "route": "lj",
-                "action": "sys_SysDep_ins",
-                "sort": 1
+                "action": "sys_SysDep_ins"
             }, {
                 "name": "修改",
-                "route": "lj",
-                "action": "sys_SysOrg_upd",
-                "sort": 4
+                "action": "sys_SysOrg_upd"
             }, {
                 "name": "删除",
-                "route": "lj",
-                "action": "sys_SysOrg_del",
-                "sort": 3
-            }],
-            "sort":2
-        }],
-        "sort": 1
+                "action": "sys_SysOrg_del"
+            }]
+        }]
     }]
 }

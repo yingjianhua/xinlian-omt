@@ -5,4 +5,4 @@
  * @author yjh
  *
  */
-package com.irille.omt.pub;
+package com.irille.omt.commons;

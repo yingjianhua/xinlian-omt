@@ -11,10 +11,12 @@ public class MenuView {
 	private String fullName;
 	@JsonIgnore
 	private MenuView up;
+	@JsonIgnore
 	private boolean leaf;//是否为叶菜单:叶菜单下有ops,非叶菜单下有subs
+	private String route;
+	private String component;
 	private List<MenuView> subs;
 	private List<OperationView> ops;
-	private int sort;
 	
 	public String getName() {
 		return name;
@@ -40,6 +42,18 @@ public class MenuView {
 	public void setLeaf(boolean leaf) {
 		this.leaf = leaf;
 	}
+	public String getRoute() {
+		return route;
+	}
+	public void setRoute(String route) {
+		this.route = route;
+	}
+	public String getComponent() {
+		return component;
+	}
+	public void setComponent(String component) {
+		this.component = component;
+	}
 	public List<MenuView> getSubs() {
 		return subs;
 	}
@@ -52,15 +66,9 @@ public class MenuView {
 	public void setOps(List<OperationView> ops) {
 		this.ops = ops;
 	}
-	public int getSort() {
-		return sort;
-	}
-	public void setSort(int sort) {
-		this.sort = sort;
-	}
 	@Override
 	public String toString() {
-		return "MenuView [name=" + name + ", leaf=" + leaf + ", subs=" + subs + ", ops=" + ops + ", sort=" + sort + "]";
+		return "MenuView [name=" + name + ", leaf=" + leaf + ", subs=" + subs + ", ops=" + ops + "]";
 	}
 	
 }

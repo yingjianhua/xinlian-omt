@@ -8,7 +8,8 @@ import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.irille.core.controller.BaseAction;
+import com.irille.core.controller.Writeable;
+import com.irille.omt.config.WebMessage;
 import com.irille.omt.dao.auth.RoleOperationDao;
 import com.irille.omt.dao.sys.AccessDao;
 import com.irille.omt.dao.usr.UserDao;
@@ -29,8 +30,15 @@ public class ItpUserLogin extends AbstractInterceptor {
 			User user = UserDao.findByUsername(autoLogin);
 			sessionmsg.setCurUser(user);
 		}
+		Writeable writer = null;
+		if(actionInvocation.getAction() instanceof Writeable) {
+			writer =(Writeable)actionInvocation.getAction();
+		} else {
+			writer = new Writeable() {};
+		}
+		
 		if(!sessionmsg.haveUser()) {
-			BaseAction.writeTimeout();
+			writer.write(WebMessage.timeout);
 			return null;
 		}
 		
@@ -39,12 +47,17 @@ public class ItpUserLogin extends AbstractInterceptor {
 		final String actionName = actionInvocation.getProxy().getActionName();
 		if(!AccessDao.listAccess().contains(actionName)) {
 			//非法请求
-			BaseAction.writeErr(0, "非法请求");
+			writer.write(WebMessage.rquest_gone);
 			return null;
 		}
-		if(!RoleOperationDao.listActionByUser(sessionmsg.getCurUser().getPkey()).contains(actionName)) {
+		if(sessionmsg.getCurUser()==null&&!RoleOperationDao.listActionByAnonymous().contains(actionName)) {
 			//没有权限
-			BaseAction.writeErr(0, "没有权限");
+			writer.write(WebMessage.rquest_unauthorized);
+			return null;
+		}
+		if(sessionmsg.getCurUser()!=null&&!RoleOperationDao.listActionByUser(sessionmsg.getCurUser().getPkey()).contains(actionName)) {
+			//没有权限
+			writer.write(WebMessage.rquest_unauthorized);
 			return null;
 		}
 		return actionInvocation.invoke();

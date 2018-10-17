@@ -15,16 +15,15 @@ public class RoleOperationService {
 		.map(bean->{
 			return new OperationView() {{
 				setName(bean.getName());
-				setRoute(bean.getRoute());
 				setAction(bean.getAction());
-				setSort(bean.getSort());
 			}};
 		})
 		.collect(Collectors.toList());
 	}
 	
-	public static void clearAllIfRoleNoExists() {
+	public static void clearAllIfRoleOrOperationNoExists() {
 		RoleOperationDao.clearAllIfRoleNoExists();
+		RoleOperationDao.clearAllIfOperationNoExists();
 	}
 	
 	public static void giveAllRoleOperation(Integer role) {

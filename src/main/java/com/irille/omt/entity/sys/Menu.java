@@ -1,156 +1,126 @@
 package com.irille.omt.entity.sys;
 
-import java.util.stream.Stream;
+import com.irille.core.repository.orm.Column;
+import com.irille.core.repository.orm.ColumnBuilder;
+import com.irille.core.repository.orm.ColumnFactory;
+import com.irille.core.repository.orm.ColumnTemplate;
+import com.irille.core.repository.orm.Entity;
+import com.irille.core.repository.orm.IColumnField;
+import com.irille.core.repository.orm.IColumnTemplate;
+import com.irille.core.repository.orm.Table;
+import com.irille.core.repository.orm.TableFactory;
 
-import irille.core.sys.Sys;
-import irille.core.sys.Sys.OYn;
-import irille.pub.bean.BeanInt;
-import irille.pub.tb.Fld;
-import irille.pub.tb.IEnumFld;
-import irille.pub.tb.Tb;
-import irille.pub.tb.Tb.Index;
-import irille.pub.tb.TbBase;
+public class Menu extends Entity {
 
-public class Menu extends BeanInt<Menu> {
-	private static final long serialVersionUID = 3685013477292302359L;
-	public static final Tb<?> TB = new Tb<>(Menu.class, "菜单").setAutoIncrement();
-
-	public enum T implements IEnumFld {// @formatter:off
-		PKEY(TbBase.crtIntPkey()),
-		NAME(Sys.T.STR__100, "名称"),//菜单的平台显示名称如:机构信息
-		FULL_NAME(Sys.T.STR__100, "完全限定名"),//菜单的完全限定名如:系统管理_机构信息
-		UP(Menu.fldOutKey("up", "上级菜单").setNull()),
-		LEAF(Sys.T.YN, "leaf"),//是否为叶菜单
-		SORT(Sys.T.SORT__INT, "sort"),
-		// >>>以下是自动产生的源代码行--内嵌字段定义--请保留此行用于识别>>>
-		// <<<以上是自动产生的源代码行--内嵌字段定义--请保留此行用于识别<<<
+	public static final Table<Menu> table = TableFactory.entity(Menu.class).column(T.values()).index(true, T.UP, T.NAME).create();
+	
+	public enum T implements IColumnField {
+		PKEY(ColumnTemplate.PKEY),
+		NAME(ColumnTemplate.STR__100.showName("名称").comment("菜单的平台显示名称如:机构信息")),
+		ROUTE(ColumnTemplate.STR__100.showName("路由").comment("浏览器地址栏中显示的路径,唯一")),
+		COMPONENT(ColumnTemplate.STR__100.showName("组件").comment("页面组件")),
+		FULL_NAME(ColumnTemplate.STR__100.showName("完全限定名").comment("菜单的完全限定名如:系统管理_机构信息") ),
+		UP(ColumnFactory.manyToOne(Menu.T.PKEY).nullable(true).showName("上级菜单")),
+		LEAF(ColumnTemplate.BOOLEAN.showName("叶菜单").comment("是否为叶菜单")),
+		SORT(ColumnTemplate.INT__11.showName("排序")),
 		;
-		// >>>以下是自动产生的源代码行--自动建立的索引定义--请保留此行用于识别>>>
-		// <<<以上是自动产生的源代码行--自动建立的索引定义--请保留此行用于识别<<<
-		public static final Index IDX_UP_NAME = TB.addIndex("up_name", true, UP, NAME);
-		private Fld<?> _fld;
+		private Column column;
 
-		private T(Class<?> clazz, String name, boolean... isnull) {
-			_fld = IEnumFld.crtFld(this, clazz, name, isnull);
+		T(IColumnTemplate template) {
+			this.column = template.builder().create(this);
 		}
 
-		private T(IEnumFld fld, boolean... isnull) {
-			_fld = IEnumFld.crtFld(this, fld, null, isnull);
+		T(ColumnBuilder builder) {
+			this.column = builder.create(this);
 		}
 
-		private T(IEnumFld fld, String name, boolean... null1) {
-			_fld = IEnumFld.crtFld(this, fld, name, null1);
+		@Override
+		public Column column() {
+			return column;
 		}
 
-		private T(IEnumFld fld, String name, int strLen) {
-			_fld = IEnumFld.crtFld(this, fld, name, strLen);
-		}
-
-		private T(Fld<?> fld) {
-			_fld = IEnumFld.crtFld(this, fld);
-		}
-
-		public Fld<?> getFld() {
-			return _fld;
-		}
 	}
 
-	static { // 在此可以加一些对FLD进行特殊设定的代码
-		Stream.of(T.values()).forEach(f->TB.add(f.getFld()));
-		TB.lockAllFlds();
-	}
-
-	public static Fld<?> fldOutKey() {
-		return fldOutKey(TB.getCodeNoPackage(), TB.getShortName());
-	}
-
-	public static Fld<?> fldOutKey(String code, String name) {
-		return Tb.crtOutKey(TB, code, name).setType(null);
-	}
-
-	// @formatter:on
 	// >>>以下是自动产生的源代码行--源代码--请保留此行用于识别>>>
-  //实例变量定义-----------------------------------------
-  private Integer _pkey;	// 编号  INT
-  private String _name;	// 名称  STR(100)
-  private String _fullName;	// 完全限定名  STR(100)
-  private Integer _up;	// 上级菜单 <表主键:Menu>  INT<null>
-  private Byte _leaf;	// leaf <OYn>  BYTE
-	// YES:1,是
-	// NO:0,否
-  private Integer _sort;	// sort  INT
+
+	// 实例变量定义-----------------------------------------
+	private Integer pkey; // 主键 INT(11)
+	private String name; // 名称 VARCHAR(100)
+	private String route; // 路由 VARCHAR(100)
+	private String component; // 组件 VARCHAR(100)
+	private String fullName; // 完全限定名 VARCHAR(100)
+	private Integer up; // 上级菜单<表主键:Menu> INT(11)<null>
+	private Boolean leaf; // 叶菜单 TINYINT(1)
+	private Integer sort; // 排序 INT(11)
 
 	@Override
-  public Menu init(){
+	public Menu init() {
 		super.init();
-    _name=null;	// 名称  STR(100)
-    _fullName=null;	// 完全限定名  STR(100)
-    _up=null;	// 上级菜单 <表主键:Menu>  INT
-    _leaf=OYn.DEFAULT.getLine().getKey();	// leaf <OYn>  BYTE
-    _sort=0;	// sort  INT
-    return this;
-  }
+		name = null; // 名称 VARCHAR(100)
+		route = null; // 路由 VARCHAR(100)
+		component = null; // 组件 VARCHAR(100)
+		fullName = null; // 完全限定名 VARCHAR(100)
+		up = null; // 上级菜单 INT(11)
+		leaf = null; // 叶菜单 TINYINT(1)
+		sort = null; // 排序 INT(11)
+		return this;
+	}
 
-  //方法----------------------------------------------
-  public static Menu loadUniqueUp_name(boolean lockFlag,Integer up,String name) {
-    return (Menu)loadUnique(T.IDX_UP_NAME,lockFlag,up,name);
-  }
-  public static Menu chkUniqueUp_name(boolean lockFlag,Integer up,String name) {
-    return (Menu)chkUnique(T.IDX_UP_NAME,lockFlag,up,name);
-  }
-  public Integer getPkey(){
-    return _pkey;
-  }
-  public void setPkey(Integer pkey){
-    _pkey=pkey;
-  }
-  public String getName(){
-    return _name;
-  }
-  public void setName(String name){
-    _name=name;
-  }
-  public String getFullName(){
-    return _fullName;
-  }
-  public void setFullName(String fullName){
-    _fullName=fullName;
-  }
-  public Integer getUp(){
-    return _up;
-  }
-  public void setUp(Integer up){
-    _up=up;
-  }
-  public Menu gtUp(){
-    if(getUp()==null)
-      return null;
-    return (Menu)get(Menu.class,getUp());
-  }
-  public void stUp(Menu up){
-    if(up==null)
-      setUp(null);
-    else
-      setUp(up.getPkey());
-  }
-  public Byte getLeaf(){
-    return _leaf;
-  }
-  public void setLeaf(Byte leaf){
-    _leaf=leaf;
-  }
-  public Boolean gtLeaf(){
-    return byteToBoolean(_leaf);
-  }
-  public void stLeaf(Boolean leaf){
-    _leaf=booleanToByte(leaf);
-  }
-  public Integer getSort(){
-    return _sort;
-  }
-  public void setSort(Integer sort){
-    _sort=sort;
-  }
+	// 方法------------------------------------------------
+	public Integer getPkey() {
+		return pkey;
+	}
+	public void setPkey(Integer pkey) {
+		this.pkey = pkey;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getRoute() {
+		return route;
+	}
+	public void setRoute(String route) {
+		this.route = route;
+	}
+	public String getComponent() {
+		return component;
+	}
+	public void setComponent(String component) {
+		this.component = component;
+	}
+	public String getFullName() {
+		return fullName;
+	}
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+	public Integer getUp() {
+		return up;
+	}
+	public void setUp(Integer up) {
+		this.up = up;
+	}
+	public Menu gtUp() {
+		return selectFrom(Menu.class, getUp());
+	}
+	public void stUp(Menu up) {
+		this.up = up.getPkey();
+	}
+	public Boolean getLeaf() {
+		return leaf;
+	}
+	public void setLeaf(Boolean leaf) {
+		this.leaf = leaf;
+	}
+	public Integer getSort() {
+		return sort;
+	}
+	public void setSort(Integer sort) {
+		this.sort = sort;
+	}
 
 	// <<<以上是自动产生的源代码行--源代码--请保留此行用于识别<<<
 }

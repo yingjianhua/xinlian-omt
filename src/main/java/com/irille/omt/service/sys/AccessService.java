@@ -3,7 +3,8 @@ package com.irille.omt.service.sys;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.irille.core.commons.annotation.Scanner;
 import com.irille.omt.dao.sys.AccessDao;
@@ -14,7 +15,7 @@ import irille.pub.svr.RequestMapping;
 
 public class AccessService {
 	
-	private static final Logger log = Logger.getLogger(AccessService.class);
+	private static final Logger logger = LoggerFactory.getLogger(AccessService.class);
 	
 	private static final String action_root_package = "com.irille.omt.action";
 	
@@ -41,7 +42,7 @@ public class AccessService {
 					bean.setMethod(methodAnnotation.alias());
 					bean.setSort(methodAnnotation.sort());
 					bean.upd();
-					log.info("更新访问控制:"+bean.getModule()+"_"+bean.getController()+"_"+bean.getMethod()+" "+bean.getAction());
+					logger.info("更新访问控制:{}_{}_{} {}", bean.getModule(), bean.getController(), bean.getMethod(), bean.getAction());
 				} else {
 					Access bean = new Access();
 					bean.setModule(moduleShowName);
@@ -50,13 +51,13 @@ public class AccessService {
 					bean.setSort(methodAnnotation.sort());
 					bean.setAction(action);
 					bean.ins();
-					log.info("新增访问控制:"+bean.getModule()+"_"+bean.getController()+"_"+bean.getMethod()+" "+bean.getAction());
+					logger.info("新增访问控制:{}_{}_{} {}", bean.getModule(), bean.getController(), bean.getMethod(), bean.getAction());
 				}
 			});
 		});
 		map.values().forEach(bean->{
 			bean.del();
-			log.info("删除访问控制:"+bean.getModule()+"_"+bean.getController()+"_"+bean.getMethod()+" "+bean.getAction());
+			logger.info("删除访问控制:{}_{}_{} {}", bean.getModule(), bean.getController(), bean.getMethod(), bean.getAction());
 		});
 	}
 

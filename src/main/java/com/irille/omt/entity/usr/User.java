@@ -1,193 +1,178 @@
 package com.irille.omt.entity.usr;
 
-import java.util.stream.Stream;
+import com.irille.core.repository.orm.Column;
+import com.irille.core.repository.orm.ColumnBuilder;
+import com.irille.core.repository.orm.ColumnFactory;
+import com.irille.core.repository.orm.ColumnTemplate;
+import com.irille.core.repository.orm.Entity;
+import com.irille.core.repository.orm.IColumnField;
+import com.irille.core.repository.orm.IColumnTemplate;
+import com.irille.core.repository.orm.Table;
+import com.irille.core.repository.orm.TableFactory;
 
-import irille.core.sys.Sys;
-import irille.core.sys.Sys.OSex;
-import irille.pub.bean.BeanInt;
 import irille.pub.tb.EnumLine;
-import irille.pub.tb.Fld;
-import irille.pub.tb.IEnumFld;
 import irille.pub.tb.IEnumOpt;
-import irille.pub.tb.Tb;
-import irille.pub.tb.TbBase;
 
-public class User extends BeanInt<User> {
-	private static final long serialVersionUID = 3685013477292302359L;
-	public static final Tb<?> TB = new Tb<>(User.class, "用户").setAutoIncrement();
-
-	public enum T implements IEnumFld {// @formatter:off
-		PKEY(TbBase.crtIntPkey()),
-		USERNAME(Sys.T.STR__200, "用户名"),//邮箱校验规则
-		PASSWORD(Sys.T.PASSWORD__NULL, "密码"),
-		NAME(Sys.T.STR__200_NULL, "名称"),
-		SEX(Sys.T.SEX, "性别"),
-		PHONE(Sys.T.MOBILE__NULL, "手机号码"),
-		ICON(Sys.T.IMG__200_NULL, "icon"),
-		COMPANY(Sys.T.INT_PLUS_OR_ZERO,"company"),
-		TYPE(Tb.crt(OType.customer)),
-		ROWVERSION(Sys.T.ROW_VERSION)
-		// >>>以下是自动产生的源代码行--内嵌字段定义--请保留此行用于识别>>>
-		// <<<以上是自动产生的源代码行--内嵌字段定义--请保留此行用于识别<<<
-		;
-		// >>>以下是自动产生的源代码行--自动建立的索引定义--请保留此行用于识别>>>
-		// <<<以上是自动产生的源代码行--自动建立的索引定义--请保留此行用于识别<<<
-		private Fld<?> _fld;
-
-		private T(Class<?> clazz, String name, boolean... isnull) {
-			_fld = IEnumFld.crtFld(this, clazz, name, isnull);
-		}
-
-		private T(IEnumFld fld, boolean... isnull) {
-			_fld = IEnumFld.crtFld(this, fld, null, isnull);
-		}
-
-		private T(IEnumFld fld, String name, boolean... null1) {
-			_fld = IEnumFld.crtFld(this, fld, name, null1);
-		}
-
-		private T(IEnumFld fld, String name, int strLen) {
-			_fld = IEnumFld.crtFld(this, fld, name, strLen);
-		}
-
-		private T(Fld<?> fld) {
-			_fld = IEnumFld.crtFld(this, fld);
-		}
-
-		public Fld<?> getFld() {
-			return _fld;
-		}
-	}
-
-	static { // 在此可以加一些对FLD进行特殊设定的代码
-		Stream.of(T.values()).forEach(f->TB.add(f.getFld()));
-		TB.lockAllFlds();
+public class User extends Entity {
+	public static final Table<User> table = TableFactory.entity(User.class).column(T.values()).create();
+	
+	public enum OSex implements IEnumOpt {
+		UNKNOW(0,"未知"),
+		MALE(1,"男"),
+		FEMALE(2,"女");
+		public static String NAME="性别";
+		public static OSex DEFAULT = UNKNOW;
+		private EnumLine _line;
+		private OSex(int key, String name) {_line=new EnumLine(this,key,name);	}
+		public EnumLine getLine(){return _line;	}
 	}
 
 	public enum OType implements IEnumOpt {
-		customer(1,"客户"),platform(2,"平台");
+		CUSTOMER(1,"客户"),PLATFORM(2,"平台");
 		public static final String NAME="用户类型";
-		public static final OType DEFAULT = customer;
+		public static final OType DEFAULT = CUSTOMER;
 		private EnumLine _line;
 		private OType(int key, String name) {_line=new EnumLine(this,key,name);	}
 		public EnumLine getLine(){return _line;	}
 	}
 	
-	public static Fld<?> fldOutKey() {
-		return fldOutKey(TB.getCodeNoPackage(), TB.getShortName());
+	public enum T implements IColumnField {
+		PKEY(ColumnTemplate.PKEY),
+		USERNAME(ColumnTemplate.STR__200.showName("用户名").comment("邮箱校验规则")),
+		PASSWORD(ColumnTemplate.STR__50_NULL.showName("密码")),
+		NAME(ColumnTemplate.STR__200_NULL.showName("名称")),
+		SEX(ColumnFactory.opt(OSex.UNKNOW).showName("性别")),
+		PHONE(ColumnTemplate.STR__20_NULL.showName("手机号码")),
+		ICON(ColumnTemplate.IMG.showName("头像")),
+		COMPANY(ColumnTemplate.INT__11_ZERO.showName("公司")),
+		TYPE(ColumnFactory.opt(OType.CUSTOMER).showName("性别")),
+		ROW_VERSION(ColumnTemplate.SHORT),
+		
+		;
+		private Column column;
+
+		T(IColumnTemplate template) {
+			this.column = template.builder().create(this);
+		}
+
+		T(ColumnBuilder builder) {
+			this.column = builder.create(this);
+		}
+
+		@Override
+		public Column column() {
+			return column;
+		}
+
 	}
 
-	public static Fld<?> fldOutKey(String code, String name) {
-		return Tb.crtOutKey(TB, code, name).setType(null);
-	}
-
-	// @formatter:on
 	// >>>以下是自动产生的源代码行--源代码--请保留此行用于识别>>>
-  //实例变量定义-----------------------------------------
-  private Integer _pkey;	// 编号  INT
-  private String _username;	// 用户名  STR(200)
-  private String _password;	// 密码  STR(40)<null>
-  private String _name;	// 名称  STR(200)<null>
-  private Byte _sex;	// 性别 <OSex>  BYTE
+
+	// 实例变量定义-----------------------------------------
+	private Integer pkey; // pkey INT(11)
+	private String username; // 用户名 VARCHAR(200)
+	private String password; // 密码 VARCHAR(50)<null>
+	private String name; // 名称 VARCHAR(200)<null>
+	private Byte sex; // 性别<OSex> TINYINT(4)
 	// UNKNOW:0,未知
 	// MALE:1,男
 	// FEMALE:2,女
-  private String _phone;	// 手机号码  STR(20)<null>
-  private String _icon;	// icon  STR(200)<null>
-  private Integer _company;	// company  INT
-  private Byte _type;	// 用户类型 <OType>  BYTE
-	// customer:1,客户
-	// platform:2,平台
-  private Short _rowversion;	// 版本  SHORT
+	private String phone; // 手机号码 VARCHAR(20)<null>
+	private String icon; // icon VARCHAR(200)<null>
+	private Integer company; // company INT(11)
+	private Byte type; // 性别<OType> TINYINT(4)
+	// CUSTOMER:1,客户
+	// PLATFORM:2,平台
+	private Short rowVersion; // rowVersion SMALLINT(6)
 
 	@Override
-  public User init(){
+	public User init() {
 		super.init();
-    _username=null;	// 用户名  STR(200)
-    _password=null;	// 密码  STR(40)
-    _name=null;	// 名称  STR(200)
-    _sex=OSex.DEFAULT.getLine().getKey();	// 性别 <OSex>  BYTE
-    _phone=null;	// 手机号码  STR(20)
-    _icon=null;	// icon  STR(200)
-    _company=0;	// company  INT
-    _type=OType.DEFAULT.getLine().getKey();	// 用户类型 <OType>  BYTE
-    _rowversion=0;	// 版本  SHORT
-    return this;
-  }
+		username = null; // 用户名 VARCHAR(200)
+		password = null; // 密码 VARCHAR(50)
+		name = null; // 名称 VARCHAR(200)
+		sex = OSex.UNKNOW.getLine().getKey(); // 性别<OSex> TINYINT(4)
+		phone = null; // 手机号码 VARCHAR(20)
+		icon = null; // icon VARCHAR(200)
+		company = 0; // company INT(11)
+		type = OType.CUSTOMER.getLine().getKey(); // 性别<OType> TINYINT(4)
+		rowVersion = null; // rowVersion SMALLINT(6)
+		return this;
+	}
 
-  //方法----------------------------------------------
-  public Integer getPkey(){
-    return _pkey;
-  }
-  public void setPkey(Integer pkey){
-    _pkey=pkey;
-  }
-  public String getUsername(){
-    return _username;
-  }
-  public void setUsername(String username){
-    _username=username;
-  }
-  public String getPassword(){
-    return _password;
-  }
-  public void setPassword(String password){
-    _password=password;
-  }
-  public String getName(){
-    return _name;
-  }
-  public void setName(String name){
-    _name=name;
-  }
-  public Byte getSex(){
-    return _sex;
-  }
-  public void setSex(Byte sex){
-    _sex=sex;
-  }
-  public OSex gtSex(){
-    return (OSex)(OSex.UNKNOW.getLine().get(_sex));
-  }
-  public void stSex(OSex sex){
-    _sex=sex.getLine().getKey();
-  }
-  public String getPhone(){
-    return _phone;
-  }
-  public void setPhone(String phone){
-    _phone=phone;
-  }
-  public String getIcon(){
-    return _icon;
-  }
-  public void setIcon(String icon){
-    _icon=icon;
-  }
-  public Integer getCompany(){
-    return _company;
-  }
-  public void setCompany(Integer company){
-    _company=company;
-  }
-  public Byte getType(){
-    return _type;
-  }
-  public void setType(Byte type){
-    _type=type;
-  }
-  public OType gtType(){
-    return (OType)(OType.customer.getLine().get(_type));
-  }
-  public void stType(OType type){
-    _type=type.getLine().getKey();
-  }
-  public Short getRowversion(){
-    return _rowversion;
-  }
-  public void setRowversion(Short rowversion){
-    _rowversion=rowversion;
-  }
+	// 方法------------------------------------------------
+	public Integer getPkey() {
+		return pkey;
+	}
+	public void setPkey(Integer pkey) {
+		this.pkey = pkey;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public Byte getSex() {
+		return sex;
+	}
+	public void setSex(Byte sex) {
+		this.sex = sex;
+	}
+	public OSex gtSex() {
+		return (OSex)(OSex.UNKNOW.getLine().get(sex));
+	}
+	public void stSex(OSex sex) {
+		this.sex = sex.getLine().getKey();
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public String getIcon() {
+		return icon;
+	}
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+	public Integer getCompany() {
+		return company;
+	}
+	public void setCompany(Integer company) {
+		this.company = company;
+	}
+	public Byte getType() {
+		return type;
+	}
+	public void setType(Byte type) {
+		this.type = type;
+	}
+	public OType gtType() {
+		return (OType)(OType.CUSTOMER.getLine().get(type));
+	}
+	public void stType(OType type) {
+		this.type = type.getLine().getKey();
+	}
+	public Short getRowVersion() {
+		return rowVersion;
+	}
+	public void setRowVersion(Short rowVersion) {
+		this.rowVersion = rowVersion;
+	}
 
 	// <<<以上是自动产生的源代码行--源代码--请保留此行用于识别<<<
 }

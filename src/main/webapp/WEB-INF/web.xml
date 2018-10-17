@@ -23,7 +23,7 @@
   </filter-mapping>
   <servlet>
     <servlet-name>StartupServlet</servlet-name>
-    <servlet-class>com.irille.omt.config.StartupServlet</servlet-class>
+    <servlet-class>com.irille.core.web.servlet.StartupServlet</servlet-class>
     <load-on-startup>0</load-on-startup>
   </servlet>
   <servlet>

@@ -5,9 +5,15 @@ import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.irille.core.controller.Writeable;
+import com.irille.core.web.exception.WebException;
+import com.irille.core.web.exception.WebMessageException;
+import com.irille.omt.action.OmtAction;
+import com.irille.omt.config.WebMessage;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.ActionProxy;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
@@ -15,30 +21,39 @@ import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 import irille.pub.Exp;
 
 public class ItpExceptionHandler extends AbstractInterceptor {
-	private static final Logger log = Logger.getLogger(ItpExceptionHandler.class);
+	
+	private static final Logger logger = LoggerFactory.getLogger(ItpExceptionHandler.class);
 
 	private static final long serialVersionUID = 1L;
 
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
 		Long date1 = System.currentTimeMillis();
-		boolean isSuccess = true;
-		Exception e2 = null;
 		try {
 			return invocation.invoke();
 		} catch (Exception e) {
-			isSuccess = false;
-			e2 = e;
-			//如果是Exp类型的异常,都是通过LOG.err方式抛出来的,异常已经打印过了,不需要重复打印
-			if(!(e instanceof Exp)) {
-				log.error("", e);
+			if(!(e instanceof Exp) && !(e instanceof WebException)) {
+				logger.error("未知错误", e);
+			}
+			if(e instanceof Exp) {
+				logger.error("Exp错误", e);
 			}
 			ActionProxy proxy = invocation.getProxy();
 			Method method = proxy.getAction().getClass().getMethod(proxy.getMethod());
+			if(method.getReturnType().equals(void.class)){
+				Writeable action = null;
+				if(invocation.getAction() instanceof OmtAction)
+					action = (Writeable)invocation.getAction();
+				else
+					action = new Writeable() {{}};
+				if(e instanceof WebMessageException) {
+					WebMessageException we = (WebMessageException)e;
+					action.write(we.getCode(), we.getMessage());
+				} else 
+					action.write(WebMessage.third_error);
+			}
 		} finally {
-			Long date2 = System.currentTimeMillis();
-			log.info("后台处理【"+getJumpUrl(ServletActionContext.getRequest())+"】共消耗【"+(date2-date1)+"】毫秒");
-//			System.err.println("后台处理【"+getJumpUrl(ServletActionContext.getRequest())+"】共消耗【"+(date2-date1)+"】毫秒");
+			logger.info("后台处理【{}】共消耗【{}】毫秒", getJumpUrl(ServletActionContext.getRequest()), System.currentTimeMillis()-date1);
 		}
 		return null;
 	}
