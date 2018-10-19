@@ -14,8 +14,8 @@ import irille.pub.tb.EnumLine;
 import irille.pub.tb.IEnumOpt;
 
 public class User extends Entity {
-	public static final Table<User> table = TableFactory.entity(User.class).column(T.values()).create();
-	
+	public static final Table<User> table = TableFactory.entity(User.class).column(QUser.values()).create();
+
 	public enum OSex implements IEnumOpt {
 		UNKNOW(0,"未知"),
 		MALE(1,"男"),
@@ -35,27 +35,26 @@ public class User extends Entity {
 		private OType(int key, String name) {_line=new EnumLine(this,key,name);	}
 		public EnumLine getLine(){return _line;	}
 	}
-	
-	public enum T implements IColumnField {
-		PKEY(ColumnTemplate.PKEY),
-		USERNAME(ColumnTemplate.STR__200.showName("用户名").comment("邮箱校验规则")),
-		PASSWORD(ColumnTemplate.STR__50_NULL.showName("密码")),
-		NAME(ColumnTemplate.STR__200_NULL.showName("名称")),
-		SEX(ColumnFactory.opt(OSex.UNKNOW).showName("性别")),
-		PHONE(ColumnTemplate.STR__20_NULL.showName("手机号码")),
-		ICON(ColumnTemplate.IMG.showName("头像")),
-		COMPANY(ColumnTemplate.INT__11_ZERO.showName("公司")),
-		TYPE(ColumnFactory.opt(OType.CUSTOMER).showName("性别")),
-		ROW_VERSION(ColumnTemplate.SHORT),
-		
+
+	public enum QUser implements IColumnField {
+		pkey(ColumnTemplate.PKEY),
+		username(ColumnTemplate.STR__200.showName("用户名").comment("邮箱校验规则")),
+		password(ColumnTemplate.STR__50_NULL.showName("密码")),
+		name(ColumnTemplate.STR__200_NULL.showName("名称")),
+		sex(ColumnFactory.opt(OSex.UNKNOW).showName("性别")),
+		phone(ColumnTemplate.STR__20_NULL.showName("手机号码")),
+		icon(ColumnTemplate.IMG.showName("头像")),
+		company(ColumnTemplate.INT__11_ZERO.showName("公司")),
+		type(ColumnFactory.opt(OType.CUSTOMER).showName("性别")),
+		row_version(ColumnTemplate.ROW_VERSION),
 		;
 		private Column column;
 
-		T(IColumnTemplate template) {
+		QUser(IColumnTemplate template) {
 			this.column = template.builder().create(this);
 		}
 
-		T(ColumnBuilder builder) {
+		QUser(ColumnBuilder builder) {
 			this.column = builder.create(this);
 		}
 
@@ -69,7 +68,7 @@ public class User extends Entity {
 	// >>>以下是自动产生的源代码行--源代码--请保留此行用于识别>>>
 
 	// 实例变量定义-----------------------------------------
-	private Integer pkey; // pkey INT(11)
+	private Integer pkey; // 主键 INT(11)
 	private String username; // 用户名 VARCHAR(200)
 	private String password; // 密码 VARCHAR(50)<null>
 	private String name; // 名称 VARCHAR(200)<null>
@@ -78,12 +77,12 @@ public class User extends Entity {
 	// MALE:1,男
 	// FEMALE:2,女
 	private String phone; // 手机号码 VARCHAR(20)<null>
-	private String icon; // icon VARCHAR(200)<null>
-	private Integer company; // company INT(11)
+	private String icon; // 头像 VARCHAR(200)<null>
+	private Integer company; // 公司 INT(11)
 	private Byte type; // 性别<OType> TINYINT(4)
 	// CUSTOMER:1,客户
 	// PLATFORM:2,平台
-	private Short rowVersion; // rowVersion SMALLINT(6)
+	private Short row; // 行版本 SMALLINT(6)
 
 	@Override
 	public User init() {
@@ -93,10 +92,10 @@ public class User extends Entity {
 		name = null; // 名称 VARCHAR(200)
 		sex = OSex.UNKNOW.getLine().getKey(); // 性别<OSex> TINYINT(4)
 		phone = null; // 手机号码 VARCHAR(20)
-		icon = null; // icon VARCHAR(200)
-		company = 0; // company INT(11)
+		icon = null; // 头像 VARCHAR(200)
+		company = 0; // 公司 INT(11)
 		type = OType.CUSTOMER.getLine().getKey(); // 性别<OType> TINYINT(4)
-		rowVersion = null; // rowVersion SMALLINT(6)
+		row = null; // 行版本 SMALLINT(6)
 		return this;
 	}
 
@@ -167,11 +166,11 @@ public class User extends Entity {
 	public void stType(OType type) {
 		this.type = type.getLine().getKey();
 	}
-	public Short getRowVersion() {
-		return rowVersion;
+	public Short getRow() {
+		return row;
 	}
-	public void setRowVersion(Short rowVersion) {
-		this.rowVersion = rowVersion;
+	public void setRow(Short row) {
+		this.row = row;
 	}
 
 	// <<<以上是自动产生的源代码行--源代码--请保留此行用于识别<<<

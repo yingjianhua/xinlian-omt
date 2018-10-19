@@ -9,7 +9,7 @@ import com.irille.omt.entity.auth.UserRole.T;
 public class UserRoleDao extends EntityRepository<UserRole>{
 	
 	public static List<Integer> listRoleByUser(Integer user) {
-		return select(T.ROLE).FROM(UserRole.class).where(T.USER.eq(user)).queryList(Integer.class);
+		return select(T.role).FROM(UserRole.class).where(T.user.eq(user)).queryList(Integer.class);
 	}
 
 }

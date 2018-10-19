@@ -20,7 +20,7 @@ public class AccessDao extends EntityRepository<Access> {
 		System.out.println(map);
 	}
 	public static List<String> listAccess() {
-		return select(T.ACTION).FROM(Access.class).queryList(String.class);
+		return select(T.action).FROM(Access.class).queryList(String.class);
 	}
 	
 }

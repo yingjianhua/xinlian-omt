@@ -20,13 +20,13 @@ public class TestRoleOperationDao {
 	public void testClearAllIfOperationNoExists() {
 		Query2.sql(new EntitySQL() {{
 			deleteFrom(RoleOperation.class);
-			where(T.OPERATION.in(new EntitySQL() {{
-				select(T.OPERATION);
+			where(T.operation.in(new EntitySQL() {{
+				select(T.operation);
 				from(new EntitySQL() {{
-					select(T.OPERATION);
+					select(T.operation);
 					from(RoleOperation.class);
-					leftJoin(Operation.class, T.OPERATION, Operation.T.PKEY);
-					where(Operation.T.PKEY.isNull());
+					leftJoin(Operation.class, T.operation, Operation.T.pkey);
+					where(Operation.T.pkey.isNull());
 				}}, RoleOperation.class.getSimpleName());
 			}}));
 		}}).execute();

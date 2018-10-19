@@ -12,17 +12,17 @@ import com.irille.core.repository.orm.TableFactory;
 
 public class Menu extends Entity {
 
-	public static final Table<Menu> table = TableFactory.entity(Menu.class).column(T.values()).index(true, T.UP, T.NAME).create();
-	
+	public static final Table<Menu> table = TableFactory.entity(Menu.class).column(T.values()).index(true, T.up, T.name).create();
+
 	public enum T implements IColumnField {
-		PKEY(ColumnTemplate.PKEY),
-		NAME(ColumnTemplate.STR__100.showName("名称").comment("菜单的平台显示名称如:机构信息")),
-		ROUTE(ColumnTemplate.STR__100.showName("路由").comment("浏览器地址栏中显示的路径,唯一")),
-		COMPONENT(ColumnTemplate.STR__100.showName("组件").comment("页面组件")),
-		FULL_NAME(ColumnTemplate.STR__100.showName("完全限定名").comment("菜单的完全限定名如:系统管理_机构信息") ),
-		UP(ColumnFactory.manyToOne(Menu.T.PKEY).nullable(true).showName("上级菜单")),
-		LEAF(ColumnTemplate.BOOLEAN.showName("叶菜单").comment("是否为叶菜单")),
-		SORT(ColumnTemplate.INT__11.showName("排序")),
+		pkey(ColumnTemplate.PKEY),
+		name(ColumnTemplate.STR__100.showName("名称").comment("菜单的平台显示名称如:机构信息")),
+		route(ColumnTemplate.STR__100.showName("路由").comment("浏览器地址栏中显示的路径,唯一")),
+		component(ColumnTemplate.STR__100.showName("组件").comment("页面组件")),
+		full_name(ColumnTemplate.STR__100.showName("完全限定名").comment("菜单的完全限定名如:系统管理_机构信息") ),
+		up(ColumnFactory.manyToOne(Menu.T.pkey).nullable(true).showName("上级菜单")),
+		leaf(ColumnTemplate.BOOLEAN.showName("叶菜单").comment("是否为叶菜单")),
+		sort(ColumnTemplate.INT__11.showName("排序")),
 		;
 		private Column column;
 

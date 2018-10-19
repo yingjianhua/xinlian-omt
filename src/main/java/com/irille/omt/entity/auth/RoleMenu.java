@@ -12,12 +12,12 @@ import com.irille.core.repository.orm.TableFactory;
 import com.irille.omt.entity.sys.Menu;
 
 public class RoleMenu extends Entity {
-	public static final Table<RoleMenu> table = TableFactory.entity(RoleMenu.class).column(T.values()).index(true, T.ROLE, T.MENU).create();
+	public static final Table<RoleMenu> table = TableFactory.entity(RoleMenu.class).column(T.values()).index(true, T.role, T.menu).create();
 	
 	public enum T implements IColumnField {		
-		PKEY(ColumnTemplate.PKEY),
-		ROLE(ColumnFactory.manyToOne(Role.class)),
-		MENU(ColumnFactory.manyToOne(Menu.class)),
+		pkey(ColumnTemplate.PKEY),
+		role(ColumnFactory.manyToOne(Role.class)),
+		menu(ColumnFactory.manyToOne(Menu.class)),
 		;
 		private Column column;
 

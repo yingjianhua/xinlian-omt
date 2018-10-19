@@ -13,7 +13,7 @@ import com.irille.omt.entity.sys.Menu.T;
 public class MenuDao extends EntityRepository<Menu> {
 
 	public static List<Menu> list() {
-		return selectFrom(Menu.class).orderBy(T.SORT.asc()).queryList();
+		return selectFrom(Menu.class).orderBy(T.sort.asc()).queryList();
 	}
 	
 	@BeforeClass

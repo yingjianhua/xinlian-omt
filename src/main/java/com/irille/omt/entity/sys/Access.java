@@ -10,16 +10,16 @@ import com.irille.core.repository.orm.Table;
 import com.irille.core.repository.orm.TableFactory;
 
 public class Access extends Entity {
-	public static final Table<Access> table = TableFactory.entity(Access.class).column(T.values()).index(true, T.ACTION).create();
-	
+	public static final Table<Access> table = TableFactory.entity(Access.class).column(T.values()).index(true, T.action).create();
+
 	public enum T implements IColumnField {
-		PKEY(ColumnTemplate.PKEY),
-		ACTION(ColumnTemplate.STR__100.showName("action").comment("请求的名字如:sys_access_init")),
-		MODULE(ColumnTemplate.STR__100.showName("模块").comment("模块的平台显示名称如:系统模块")),
-		CONTROLLER(ColumnTemplate.STR__100.showName("控制器").comment("控制器的平台显示名称如:菜单管理")),
-		METHOD(ColumnTemplate.STR__100.showName("方法").comment("方法的平台显示名称如:查询")),
-		DESCRIPTION(ColumnTemplate.TEXT__20000_NULL.showName("描述")),
-		SORT(ColumnTemplate.INT__11.showName("排序")),
+		pkey(ColumnTemplate.PKEY),
+		action(ColumnTemplate.STR__100.showName("action").comment("请求的名字如:sys_access_init")),
+		module(ColumnTemplate.STR__100.showName("模块").comment("模块的平台显示名称如:系统模块")),
+		controller(ColumnTemplate.STR__100.showName("控制器").comment("控制器的平台显示名称如:菜单管理")),
+		method(ColumnTemplate.STR__100.showName("方法").comment("方法的平台显示名称如:查询")),
+		description(ColumnTemplate.TEXT__20000_NULL.showName("描述")),
+		sort(ColumnTemplate.INT__11.showName("排序")),
 		;
 		private Column column;
 
@@ -65,42 +65,55 @@ public class Access extends Entity {
 	public Integer getPkey() {
 		return pkey;
 	}
+
 	public void setPkey(Integer pkey) {
 		this.pkey = pkey;
 	}
+
 	public String getAction() {
 		return action;
 	}
+
 	public void setAction(String action) {
 		this.action = action;
 	}
+
 	public String getModule() {
 		return module;
 	}
+
 	public void setModule(String module) {
 		this.module = module;
 	}
+
 	public String getController() {
 		return controller;
 	}
+
 	public void setController(String controller) {
 		this.controller = controller;
 	}
+
 	public String getMethod() {
 		return method;
 	}
+
 	public void setMethod(String method) {
 		this.method = method;
 	}
+
 	public String getDescription() {
 		return description;
 	}
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
 	public Integer getSort() {
 		return sort;
 	}
+
 	public void setSort(Integer sort) {
 		this.sort = sort;
 	}

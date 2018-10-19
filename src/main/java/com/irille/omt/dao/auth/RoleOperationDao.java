@@ -16,24 +16,24 @@ public class RoleOperationDao extends EntityRepository<Operation> {
 
 	
 	public static List<Operation> listOperationByRole(Integer role) {
-		return selectFrom(Operation.class).leftJoin(RoleOperation.class, Operation.T.PKEY, T.OPERATION).where(T.ROLE.eq(role)).orderBy(Operation.T.SORT.asc()).queryList();
+		return selectFrom(Operation.class).leftJoin(RoleOperation.class, Operation.T.pkey, T.operation).where(T.role.eq(role)).orderBy(Operation.T.sort.asc()).queryList();
 	}
 	
 	public static void clearAllIfRoleNoExists() {
-		String sql = "DELETE FROM "+RoleOperation.table.name()+" WHERE "+T.ROLE+" IN (SELECT a."+T.ROLE+" FROM (SELECT a."+T.ROLE+" FROM "+RoleOperation.table.name()+" a LEFT JOIN "+Role.table.name()+" b ON a."+T.ROLE+" = b."+Role.T.PKEY+" WHERE b."+Role.T.PKEY+" IS NULL ) a)";
+		String sql = "DELETE FROM "+RoleOperation.table.name()+" WHERE "+T.role+" IN (SELECT a."+T.role+" FROM (SELECT a."+T.role+" FROM "+RoleOperation.table.name()+" a LEFT JOIN "+Role.table.name()+" b ON a."+T.role+" = b."+Role.T.pkey+" WHERE b."+Role.T.pkey+" IS NULL ) a)";
 		sql(sql).execute();
 	}
 	
 	public static void clearAllIfOperationNoExists() {
 		Query2.sql(new EntitySQL() {{
 			deleteFrom(RoleOperation.class);
-			where(T.OPERATION.in(new EntitySQL() {{
-				select(T.OPERATION);
+			where(T.operation.in(new EntitySQL() {{
+				select(T.operation);
 				from(new EntitySQL() {{
-					select(T.OPERATION);
+					select(T.operation);
 					from(RoleOperation.class);
-					leftJoin(Operation.class, T.OPERATION, Operation.T.PKEY);
-					where(Operation.T.PKEY.isNull());
+					leftJoin(Operation.class, T.operation, Operation.T.pkey);
+					where(Operation.T.pkey.isNull());
 				}}, RoleOperation.class.getSimpleName());
 			}}));
 		}}).execute();
@@ -46,21 +46,21 @@ public class RoleOperationDao extends EntityRepository<Operation> {
 	 * @param role
 	 */
 	public static void addAllOperation4Role(Integer role) {
-		sql("insert ignore into "+RoleOperation.table.name()+" ("+T.ROLE+", "+T.OPERATION+") select ?, "+Operation.T.PKEY+" from "+Operation.table.name(), role).executeUpdate();
+		sql("insert ignore into "+RoleOperation.table.name()+" ("+T.role+", "+T.operation+") select ?, "+Operation.T.pkey+" from "+Operation.table.name(), role).executeUpdate();
 	}
 	public static List<String> listActionByAnonymous() {
-		return select(Operation.T.ACTION)
+		return select(Operation.T.action)
 				.FROM(Operation.class)
-				.leftJoin(RoleOperation.class, Operation.T.PKEY, RoleOperation.T.OPERATION)
-				.leftJoin(Role.class, RoleOperation.T.ROLE, Role.T.PKEY)
-				.where(Role.T.NAME.eq(Role.anonymous))
+				.leftJoin(RoleOperation.class, Operation.T.pkey, RoleOperation.T.operation)
+				.leftJoin(Role.class, RoleOperation.T.role, Role.T.pkey)
+				.where(Role.T.name.eq(Role.anonymous))
 				.queryList(String.class);
 	}
 	public static List<String> listActionByRole(Integer... roles) {
-		return select(Operation.T.ACTION)
+		return select(Operation.T.action)
 				.FROM(Operation.class)
-				.leftJoin(RoleOperation.class, Operation.T.PKEY, RoleOperation.T.OPERATION)
-				.where(roles.length>0, RoleOperation.T.ROLE, "in (?)", ()->Stream.of(roles).map(role->String.valueOf(role)).collect(Collectors.joining(",")))
+				.leftJoin(RoleOperation.class, Operation.T.pkey, RoleOperation.T.operation)
+				.where(roles.length>0, RoleOperation.T.role, "in (?)", ()->Stream.of(roles).map(role->String.valueOf(role)).collect(Collectors.joining(",")))
 				.queryList(String.class);
 	}
 	public static List<String> listActionByUser(Integer user) {

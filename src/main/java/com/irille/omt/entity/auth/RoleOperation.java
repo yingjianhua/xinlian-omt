@@ -12,13 +12,13 @@ import com.irille.core.repository.orm.TableFactory;
 import com.irille.omt.entity.sys.Operation;
 
 public class RoleOperation extends Entity {
-	
-	public static final Table<RoleOperation> table = TableFactory.entity(RoleOperation.class).column(T.values()).index(true, T.ROLE, T.OPERATION).create();
-	
-	public enum T implements IColumnField {		
-		PKEY(ColumnTemplate.PKEY),
-		ROLE(ColumnFactory.manyToOne(Role.class).showName("角色")),
-		OPERATION(ColumnFactory.manyToOne(Operation.class).showName("操作")),
+
+	public static final Table<RoleOperation> table = TableFactory.entity(RoleOperation.class).column(T.values()).index(true, T.role, T.operation).create();
+
+	public enum T implements IColumnField {
+		pkey(ColumnTemplate.PKEY),
+		role(ColumnFactory.manyToOne(Role.class).showName("角色")),
+		operation(ColumnFactory.manyToOne(Operation.class).showName("操作")),
 		;
 		private Column column;
 
@@ -56,30 +56,39 @@ public class RoleOperation extends Entity {
 	public Integer getPkey() {
 		return pkey;
 	}
+
 	public void setPkey(Integer pkey) {
 		this.pkey = pkey;
 	}
+
 	public Integer getRole() {
 		return role;
 	}
+
 	public void setRole(Integer role) {
 		this.role = role;
 	}
+
 	public Role gtRole() {
 		return selectFrom(Role.class, getRole());
 	}
+
 	public void stRole(Role role) {
 		this.role = role.getPkey();
 	}
+
 	public Integer getOperation() {
 		return operation;
 	}
+
 	public void setOperation(Integer operation) {
 		this.operation = operation;
 	}
+
 	public Operation gtOperation() {
 		return selectFrom(Operation.class, getOperation());
 	}
+
 	public void stOperation(Operation operation) {
 		this.operation = operation.getPkey();
 	}

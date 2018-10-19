@@ -11,7 +11,7 @@ import com.irille.omt.entity.sys.Menu;
 public class RoleMenuDao extends EntityRepository<RoleMenu> {
 	
 	public static List<Menu> listMenuByRole(Integer role) {
-		return selectFrom(Menu.class).leftJoin(RoleMenu.class, Menu.T.PKEY, T.MENU).where(T.ROLE.eq(role)).orderBy(Menu.T.SORT.asc()).queryList();
+		return selectFrom(Menu.class).leftJoin(RoleMenu.class, Menu.T.pkey, T.menu).where(T.role.eq(role)).orderBy(Menu.T.sort.asc()).queryList();
 	}
 
 	public static List<RoleMenu> list() {
@@ -19,12 +19,12 @@ public class RoleMenuDao extends EntityRepository<RoleMenu> {
 	}
 	
 	public static void clearAllIfRoleNoExists() {
-		String sql = "DELETE FROM "+RoleMenu.table.name()+" WHERE "+T.ROLE+" IN (SELECT a."+T.ROLE+" FROM (SELECT a."+T.ROLE+" FROM "+RoleMenu.table.name()+" a LEFT JOIN "+Role.table.name()+" b ON a."+T.ROLE+" = b."+Role.T.PKEY+" WHERE b."+Role.T.PKEY+" IS NULL ) a)";
+		String sql = "DELETE FROM "+RoleMenu.table.name()+" WHERE "+T.role+" IN (SELECT a."+T.role+" FROM (SELECT a."+T.role+" FROM "+RoleMenu.table.name()+" a LEFT JOIN "+Role.table.name()+" b ON a."+T.role+" = b."+Role.T.pkey+" WHERE b."+Role.T.pkey+" IS NULL ) a)";
 		sql(sql).executeUpdate();
 	}
 	
 	public static void clearAllIfMenuNoExists() {
-		String sql = "DELETE FROM "+RoleMenu.table.name()+" WHERE "+T.MENU+" IN (SELECT a."+T.MENU+" FROM (SELECT a."+T.MENU+" FROM "+RoleMenu.table.name()+" a LEFT JOIN "+Menu.table.name()+" b ON a."+T.MENU+" = b."+Menu.T.PKEY+" WHERE b."+Menu.T.PKEY+" IS NULL ) a)";
+		String sql = "DELETE FROM "+RoleMenu.table.name()+" WHERE "+T.menu+" IN (SELECT a."+T.menu+" FROM (SELECT a."+T.menu+" FROM "+RoleMenu.table.name()+" a LEFT JOIN "+Menu.table.name()+" b ON a."+T.menu+" = b."+Menu.T.pkey+" WHERE b."+Menu.T.pkey+" IS NULL ) a)";
 		sql(sql).executeUpdate();
 	}
 	
@@ -33,11 +33,11 @@ public class RoleMenuDao extends EntityRepository<RoleMenu> {
 	 * @param role
 	 */
 	public static void addAllMenu4Role(Integer role) {
-		sql("insert ignore into "+RoleMenu.table.name()+" ("+T.ROLE+", "+T.MENU+") select ?, "+Menu.T.PKEY+" from "+Menu.table.name(), role).executeUpdate();
+		sql("insert ignore into "+RoleMenu.table.name()+" ("+T.role+", "+T.menu+") select ?, "+Menu.T.pkey+" from "+Menu.table.name(), role).executeUpdate();
 	}
 	
 	public static void main(String[] args) {
-		String sql = "insert ignore into "+RoleMenu.table.name()+" ("+T.ROLE+", "+T.MENU+") select ?, "+Menu.T.PKEY+" from "+Menu.table.name();
+		String sql = "insert ignore into "+RoleMenu.table.name()+" ("+T.role+", "+T.menu+") select ?, "+Menu.T.pkey+" from "+Menu.table.name();
 		System.out.println(sql);
 	}
 }

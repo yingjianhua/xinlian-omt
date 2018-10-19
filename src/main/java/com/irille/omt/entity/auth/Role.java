@@ -10,12 +10,12 @@ import com.irille.core.repository.orm.Table;
 import com.irille.core.repository.orm.TableFactory;
 
 public class Role extends Entity {
-	public static final Table<Role> table = TableFactory.entity(Role.class).column(T.values()).index(true, T.NAME).create();
-	
-	public enum T implements IColumnField {		
-		PKEY(ColumnTemplate.PKEY),
-		NAME(ColumnTemplate.STR__100.showName("名字")),
-		SORT(ColumnTemplate.INT__11.showName("排序")),
+	public static final Table<Role> table = TableFactory.entity(Role.class).column(T.values()).index(true, T.name).create();
+
+	public enum T implements IColumnField {
+		pkey(ColumnTemplate.PKEY),
+		name(ColumnTemplate.STR__100.showName("名字")),
+		sort(ColumnTemplate.INT__11.showName("排序")),
 		;
 		private Column column;
 
@@ -56,18 +56,23 @@ public class Role extends Entity {
 	public Integer getPkey() {
 		return pkey;
 	}
+
 	public void setPkey(Integer pkey) {
 		this.pkey = pkey;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public Integer getSort() {
 		return sort;
 	}
+
 	public void setSort(Integer sort) {
 		this.sort = sort;
 	}

@@ -13,13 +13,13 @@ import com.irille.core.repository.orm.TableFactory;
 public class Operation extends Entity {
 
 	public static final Table<Operation> table = TableFactory.entity(Operation.class).column(T.values()).create();
-	
+
 	public enum T implements IColumnField {
-		PKEY(ColumnTemplate.PKEY),
-		NAME(ColumnTemplate.STR__100.showName("名字")),
-		MENU(ColumnFactory.manyToOne(Menu.class).showName("菜单")),
-		ACTION(ColumnTemplate.STR__100.showName("请求")),
-		SORT(ColumnTemplate.INT__11.showName("排序")),
+		pkey(ColumnTemplate.PKEY),
+		name(ColumnTemplate.STR__100.showName("名字")),
+		menu(ColumnFactory.manyToOne(Menu.class).showName("菜单")),
+		action(ColumnTemplate.STR__100.showName("请求")),
+		sort(ColumnTemplate.INT__11.showName("排序")),
 		;
 		private Column column;
 

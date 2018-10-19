@@ -16,9 +16,9 @@ public class UserRole extends Entity {
 	public static final Table<UserRole> table = TableFactory.entity(UserRole.class).column(T.values()).create();
 	
 	public enum T implements IColumnField {
-		PKEY(ColumnTemplate.PKEY),
-		ROLE(ColumnFactory.manyToOne(Role.class)),
-		USER(ColumnFactory.manyToOne(User.class)),
+		pkey(ColumnTemplate.PKEY),
+		role(ColumnFactory.manyToOne(Role.class)),
+		user(ColumnFactory.manyToOne(User.class)),
 		;
 		private Column column;
 
